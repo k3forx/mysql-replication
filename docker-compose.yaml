@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  source:
+    container_name: source
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql-source/my.cnf:/etc/mysql/conf.d/my.cnf
+      - source:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+  
+  replicas-1:
+    container_name: replicas-1
+    image: mysql:8.0
+    ports:
+      - 3307:3306
+    volumes:
+      - ./docker/mysql-replicas-1/my.cnf:/etc/mysql/conf.d/my.cnf
+      - replicas-1:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+
+volumes:
+  source:
+  replicas-1:
