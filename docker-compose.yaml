@@ -11,6 +11,8 @@ services:
       - source:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=test
+    networks:
+      - demo
   
   replicas-1:
     container_name: replicas-1
@@ -22,7 +24,12 @@ services:
       - replicas-1:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=test
+    networks:
+      - demo
 
 volumes:
   source:
   replicas-1:
+
+networks:
+  demo:
