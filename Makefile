@@ -10,6 +10,10 @@ source: ## Conntect to mysql container (source)
 replicas-1: ## Conntect to mysql container (replicas-1)
 	docker-compose exec replicas-1 mysql -u$(DB_USER) -p$(DB_PASS)
 
+.PHONY: replicas-2
+replicas-2: ## Conntect to mysql container (replicas-2)
+	docker-compose exec replicas-2 mysql -u$(DB_USER) -p$(DB_PASS)
+
 .PHONY: start
 start: ## Start mysql containers
 	docker-compose up -d
@@ -20,4 +24,4 @@ stop:
 
 .PHONY: clean
 clean: 
-	docker volume rm mysql-replication_source && docker volume rm mysql-replication_replicas-1
+	docker volume rm mysql-replication_source && docker volume rm mysql-replication_replicas-1 && docker volume rm mysql-replication_replicas-2

@@ -272,3 +272,5 @@ End_log_pos: 851
 - The mysql.gtid_executed table is provided for internal use by the MySQL server. It enables a replica to use GTIDs when binary logging is disabled on the replica, and it enables retention of the GTID state when the binary logs have been lost
 
 - GTIDs are stored in the `mysql.gtid_executed` table only when `gtid_mode` is `ON` or `ON_PERMISSIVE`.
+
+### 17.1.3.2 GTID Life Cycle
