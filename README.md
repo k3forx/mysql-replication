@@ -223,3 +223,52 @@ End_log_pos: 851
        Info: CREATE DATABASE sample /* xid=17 */
 8 rows in set (0.00 sec)
 ```
+
+## 17.1.3 Replication with Global Transaction Identifiers
+
+### 17.1.3.1 GTID Format and Storage
+
+- A global transaction identifier (GTID) is a unique identifier created and associated with each transaction committed on the server of origin (the source).
+
+- The MySQL system table mysql.gtid_executed is used to preserve the assigned GTIDs of all the transactions applied on a MySQL server, except those that are stored in a currently active binary log file.
+
+- A GTID is represented as a pair of coordinates, separated by a colon character (:), as shown here:
+
+	```bash
+	GTID = source_id:transaction_id
+	```
+
+- The upper limit for sequence numbers for GTIDs on a server instance is the number of non-negative values for a signed 64-bit integer (2 to the power of 63 minus 1, or 9,223,372,036,854,775,807). If the server runs out of GTIDs, it takes the action specified by binlog_error_action. From MySQL 8.0.23, a warning message is issued when the server instance is approaching the limit.
+
+#### GTID Sets
+
+- A GTID set is a set comprising one or more single GTIDs or ranges of GTIDs.
+
+- A range of GTIDs originating from the same server can be collapsed into a single expression, as shown here:
+
+	```bash
+	3E11FA47-71CA-11E1-9E33-C80AA9429562:1-5
+	```
+
+- Multiple single GTIDs or ranges of GTIDs originating from the same server can also be included in a single expression, with the GTIDs or ranges separated by colons, as in the following example:
+
+	```bash
+	3E11FA47-71CA-11E1-9E33-C80AA9429562:1-3:11:47-49
+	```
+
+#### mysql.gtid_executed Table
+
+- GTIDs are stored in a table named gtid_executed, in the mysql database.
+
+	```sql
+	CREATE TABLE gtid_executed (
+		source_uuid CHAR(36) NOT NULL,
+		interval_start BIGINT(20) NOT NULL,
+		interval_end BIGINT(20) NOT NULL,
+		PRIMARY KEY (source_uuid, interval_start)
+	)
+	```
+
+- The mysql.gtid_executed table is provided for internal use by the MySQL server. It enables a replica to use GTIDs when binary logging is disabled on the replica, and it enables retention of the GTID state when the binary logs have been lost
+
+- GTIDs are stored in the `mysql.gtid_executed` table only when `gtid_mode` is `ON` or `ON_PERMISSIVE`.

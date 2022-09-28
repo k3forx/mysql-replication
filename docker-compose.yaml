@@ -3,7 +3,7 @@ version: "3.8"
 services:
   source:
     container_name: source
-    image: mysql:8.0
+    image: mysql:8.0.30-debian
     ports:
       - 3306:3306
     volumes:
@@ -16,7 +16,7 @@ services:
   
   replicas-1:
     container_name: replicas-1
-    image: mysql:8.0
+    image: mysql:8.0.30-debian
     ports:
       - 3307:3306
     volumes:
@@ -27,9 +27,23 @@ services:
     networks:
       - demo
 
+  replicas-2:
+    container_name: replicas-2
+    image: mysql:8.0.30-debian
+    ports:
+      - 3308:3306
+    volumes:
+      - ./docker/mysql-replicas-1/my.cnf:/etc/mysql/conf.d/my.cnf
+      - replicas-2:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+    networks:
+      - demo
+
 volumes:
   source:
   replicas-1:
+  replicas-2:
 
 networks:
   demo:
