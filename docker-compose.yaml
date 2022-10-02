@@ -33,7 +33,7 @@ services:
     ports:
       - 3308:3306
     volumes:
-      - ./docker/mysql-replicas-1/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql-replicas-2/my.cnf:/etc/mysql/conf.d/my.cnf
       - replicas-2:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=test
